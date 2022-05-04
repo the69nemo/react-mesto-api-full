@@ -1,0 +1,18 @@
+.element__trash-box-button{
+  visibility: visible;
+  background: url(../../../images/trash_box.svg) no-repeat;
+  background-position: center;
+  height: 19px;
+  width: 18px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border: 0;
+  transition: opacity 0.2s linear;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.element__trash-box-button:hover {
+  opacity: .6;
+}

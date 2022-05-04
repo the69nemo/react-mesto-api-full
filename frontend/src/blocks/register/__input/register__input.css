@@ -1,0 +1,18 @@
+.register__input {
+  box-sizing: border-box;
+  width: 100%;
+  border: 0;
+  padding: 30px 0 13px;
+  border-bottom: 2px solid #cccccc;
+  background-color: transparent;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #cccccc;
+}
+
+.register__input:focus {
+    outline: none;
+}

@@ -1,0 +1,7 @@
+.element__button_active {
+  background: url(../../../../images/likeIconActive.svg) no-repeat;
+}
+
+.element__button_active:hover {
+  opacity: 1;
+}

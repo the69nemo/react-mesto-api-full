@@ -1,0 +1,6 @@
+.register__input-wrapper{
+    display: flex;
+    flex-direction: column;
+    border: 0;
+    width: 100%;
+}

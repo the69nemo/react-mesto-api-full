@@ -1,0 +1,18 @@
+.popup__form-job {
+  box-sizing: border-box;
+  width: 100%;
+  border: 0;
+  padding: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, .2);
+  padding-bottom: 13px;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000000;
+}
+
+.popup__form-job:focus {
+  outline: none;
+}

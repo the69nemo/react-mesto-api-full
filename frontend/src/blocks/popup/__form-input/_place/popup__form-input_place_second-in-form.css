@@ -1,0 +1,9 @@
+.popup__form-input_place_second-in-form {
+  margin-bottom: 48px;
+}
+
+@media screen and (max-width: 550px) {
+  .popup__form-input_place_second-in-form {
+    margin-bottom: 45px;
+  }
+}
