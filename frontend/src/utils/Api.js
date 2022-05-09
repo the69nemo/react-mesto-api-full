@@ -14,14 +14,14 @@ class Api {
 
   getUserInfoFromApi () {
     return fetch(`${this._url}/users/me`, {
-      headers: this._headers
+      headers: this._headers,
     })
     .then((res) => this._handleResponse(res));
   }
 
   getCardsFromApi () {
     return fetch(`${this._url}/cards`, {
-      headers: this._headers
+      headers: this._headers,
     })
     .then((res) => this._handleResponse(res));
   }
@@ -71,9 +71,9 @@ class Api {
 }
 
 export const api = new Api ({
-  url: 'https://mesto.nomoreparties.co/v1/cohort-35',
-  headers: {
-    authorization: '8994131c-f4f1-45cc-a5e7-8627a23e5031',
-    'Content-Type': 'application/json'
+  url: 'http://api.front.proekt.nomoredomains.work',
+  headers: {        
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${localStorage.getItem("jwt")}`
   },
 });

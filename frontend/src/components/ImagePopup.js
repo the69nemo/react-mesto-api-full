@@ -8,6 +8,7 @@ function ImagePopup({ card, onClose }) {
       document.addEventListener("keydown", handleCloseByEsc);
     }
     return () => document.removeEventListener("keydown", handleCloseByEsc);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [card]);
 
   return (

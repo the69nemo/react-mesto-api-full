@@ -9,6 +9,8 @@ const {
   NotRepetitionErr,
 } = require('../errors');
 
+const { NODE_ENV, JWT_SECRET } = process.env;
+
 const updateParams = {
   new: true,
   runValidators: true,
@@ -20,7 +22,7 @@ module.exports.getCurrentUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundErr('Пользователь не найден');
       } else {
-        res.send({ data: user });
+        res.send(user);
       }
     })
     .catch((err) => {
@@ -34,7 +36,7 @@ module.exports.getCurrentUser = (req, res, next) => {
 
 module.exports.getAllUsers = (req, res, next) => {
   User.find({})
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch((err) => next(err));
 };
 
@@ -44,7 +46,7 @@ module.exports.getUserById = (req, res, next) => {
       if (!user) {
         throw new NotFoundErr('Пользователь не найден');
       } else {
-        res.send({ data: user });
+        res.send(user);
       }
     })
     .catch((err) => {
@@ -71,14 +73,13 @@ module.exports.createNewUser = (req, res, next) => {
               name, about, avatar, email, password: hash,
             });
           })
-          .then(() => {
+          .then((user) => {
             res.status(200).send({
-              data: {
-                name,
-                about,
-                avatar,
-                email,
-              },
+              name: user.name,
+              about: user.about,
+              avatar: user.avatar,
+              email: user.email,
+              _id: user._id,
             });
           })
           .catch((err) => {
@@ -107,7 +108,7 @@ module.exports.updateUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundErr('Пользователь не найден');
       } else {
-        res.send({ data: user });
+        res.send(user);
       }
     })
     .catch((err) => {
@@ -131,7 +132,7 @@ module.exports.updateAvatar = (req, res, next) => {
       if (!user) {
         throw new NotFoundErr('Пользователь не найден');
       } else {
-        res.send({ data: user });
+        res.send(user);
       }
     })
     .catch((err) => {
@@ -150,7 +151,7 @@ module.exports.login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        'super-puper-secret-key',
+        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
         { expiresIn: '7d' },
       );
       res.send({ token });

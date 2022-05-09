@@ -1,4 +1,4 @@
-export const BASE_URL = "https://auth.nomoreparties.co";
+export const BASE_URL = "http://api.front.proekt.nomoredomains.work";
 
 const handleResponse = (res) => {
   if (res.ok) {
@@ -27,15 +27,15 @@ export const authorize = (password, email) => {
     body: JSON.stringify({ password, email }),
   })
     .then((res) => handleResponse(res))
-    .then((data) => {
-      if (data.token) {
-        localStorage.setItem("token", data.token);        
+    .then((data) => {            
+      if (data.token) {        
+        localStorage.setItem("jwt", data.token);                      
         return data;
       }
     });
 };
 
-export const getToken = (token) => {
+export const getToken = (token) => {  
   return fetch(`${BASE_URL}/users/me`, {
     method: 'GET',
     headers: {

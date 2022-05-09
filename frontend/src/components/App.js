@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
 import "../index.css";
@@ -46,95 +47,35 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setSelectedCard(null);
     setIsInfoTooltipOpen(false);
-  };
+  };   
 
-  useEffect(() => {
-    if (isLoggedIn) {
+  useEffect(() => {      
+    if (isLoggedIn) {      
       api
         .getUserInfoFromApi()
-        .then((user) => {
+        .then((user) => {                   
           setCurrentUser(user);
+          setEmail(user.email);          
         })
         .catch((err) => `Ошибка получения данных пользователя : ${err}`);
     }
   }, [isLoggedIn]);
 
-  useEffect(() => {
+  useEffect(() => {    
     if (isLoggedIn) {
       api
         .getCardsFromApi()
-        .then((cards) => {
-          setCards(cards);
+        .then((cards) => {          
+          setCards(cards.reverse());
         })
         .catch((err) => `Ошибка получения карточек: ${err}`);
     }
   }, [isLoggedIn]);
 
   useEffect(() => {
+    
     checkToken();
   }, []);
-
-  const handelCloseAllPopup = (evt) => {
-    if (
-      evt.type === "keydown" ||
-      evt.target.classList.contains("popup__opened") ||
-      evt.target.classList.contains("popup__close-button")
-    ) {
-      closeAllPopups();
-    }
-  };
-
-  const handleUpdateUser = (user) => {
-    api
-      .editProfileFromApi(user)
-      .then((userInfo) => {
-        setCurrentUser(userInfo);
-        closeAllPopups();
-      })
-      .catch((err) => `Ошибка редактирования данных профиля: ${err}`);
-  };
-
-  const handleUpdateAvatar = ({ avatar }) => {
-    api
-      .patchAvatarFromApi(avatar)
-      .then((user) => {
-        setCurrentUser(user);
-        closeAllPopups();
-      })
-      .catch((err) => `Ошибка редактирования аватара профиля: ${err}`);
-  };
-
-  const handleCardLike = (card) => {
-    const isLiked = card.likes.some((item) => item._id === currentUser._id);
-
-    api
-      .changeLikeCardStatus(card._id, isLiked)
-      .then((newCard) => {
-        setCards((state) =>
-          state.map((item) => (item._id === card._id ? newCard : item))
-        );
-      })
-      .catch((err) => `Ошибка связанная с размещением лайков: ${err}`);
-  };
-
-  const handleCardDelete = (card) => {
-    api
-      .deleteCardFromServer(card._id)
-      .then(() => {
-        setCards((state) => state.filter((item) => item._id != card._id));
-      })
-      .catch((err) => `Ошибка связанная с удалением карточки: ${err}`);
-  };
-
-  const handleAddNewCard = (card) => {
-    api
-      .postNewCardToServer(card)
-      .then((newCard) => {
-        setCards([newCard, ...cards]);
-        closeAllPopups();
-      })
-      .catch((err) => `Ошибка связанная с загрузкой новой карточки: ${err}`);
-  };
 
   const handleRegister = (password, email) => {
     auth
@@ -151,7 +92,7 @@ function App() {
           text: "Что-то пошло не так! Попробуйте ещё раз.",
           imgPath: unSuccessImg,
         });
-        return err == 400
+        return err === 400
           ? console.log("Ошибка 400 - некорректно заполнено одно из полей")
           : console.log(`Ошибка ${err}`);
       })
@@ -161,7 +102,7 @@ function App() {
   const handleAutorize = (password, email) => {
     auth
       .authorize(password, email)
-      .then((data) => {
+      .then((data) => {                      
         auth.getToken(data.token).then((res) => {
           setIsLoggedIn(true);
           history.push("/");
@@ -187,25 +128,85 @@ function App() {
   };
 
   const checkToken = () => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      auth
-        .getToken(token)
-        .then((res) => {
+    const token = localStorage.getItem("jwt");
+    if (token) {      
+      auth.getToken(token)
+        .then((res) => {                            
           setIsLoggedIn(true);
-          history.push("/");
-          setEmail(res.data.email);
+          history.push("/");                   
         })
         .catch((err) => console.log(err));
     }
   };
 
   const signOut = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("jwt");    
     setIsLoggedIn(false);
     history.push("/signup");
   };
 
+  const handelCloseAllPopup = (evt) => {
+    if (
+      evt.type === "keydown" ||
+      evt.target.classList.contains("popup__opened") ||
+      evt.target.classList.contains("popup__close-button")
+    ) {
+      closeAllPopups();
+    }
+  };
+
+  const handleUpdateUser = (user) => {
+    api
+      .editProfileFromApi(user)
+      .then((userInfo) => {        
+        setCurrentUser(userInfo);
+        closeAllPopups();
+      })
+      .catch((err) => `Ошибка редактирования данных профиля: ${err}`);
+  };
+
+  const handleUpdateAvatar = ({ avatar }) => {
+    api
+      .patchAvatarFromApi(avatar)
+      .then((user) => {
+        setCurrentUser(user);
+        closeAllPopups();
+      })
+      .catch((err) => `Ошибка редактирования аватара профиля: ${err}`);
+  };
+
+  const handleCardLike = (card) => {
+    const isLiked = card.likes.some((item) => item === currentUser._id);
+    
+    api
+      .changeLikeCardStatus(card._id, isLiked)
+      .then((newCard) => {
+        setCards((state) =>
+          state.map((item) => (item._id === card._id ? newCard : item))
+        );
+      })
+      .catch((err) => `Ошибка связанная с размещением лайков: ${err}`);
+  };
+
+  const handleCardDelete = (card) => {
+    api
+      .deleteCardFromServer(card._id)
+      .then(() => {
+        setCards((state) => state.filter((item) => item._id !== card._id));
+      })
+      .catch((err) => `Ошибка связанная с удалением карточки: ${err}`);
+  };
+
+  const handleAddNewCard = (card) => {
+    api
+      .postNewCardToServer(card)
+      .then((newCard) => {
+        setCards([newCard, ...cards]);
+        closeAllPopups();
+      })
+      .catch((err) => `Ошибка связанная с загрузкой новой карточки: ${err}`);
+  }; 
+ 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="root">

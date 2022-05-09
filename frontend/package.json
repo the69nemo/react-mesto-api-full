@@ -13,6 +13,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "deploy": "npm run build && scp -r ./build/* thestigmata@84.201.137.57:/home/thestigmata/front",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

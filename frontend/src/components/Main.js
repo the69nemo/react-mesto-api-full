@@ -12,8 +12,8 @@ function Main({
   onCardClick,
 }) {
   const currentUser = useContext(CurrentUserContext);
-
-  const elements = cards.map((card) => {
+  
+  const elements = cards.map((card) => {   
     return (
       <Card
         card={card}
