@@ -1,7 +1,6 @@
 class Api {
-  constructor ({ url, headers }) {
-    this._url = url;
-    this._headers = headers;
+  constructor ({ url }) {
+    this._url = url;    
   }
 
   _handleResponse (res) {
@@ -12,68 +11,86 @@ class Api {
     }
   }
 
-  getUserInfoFromApi () {
+  getUserInfoFromApi (token) {
     return fetch(`${this._url}/users/me`, {
-      headers: this._headers,
+      headers: {        
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      
     })
     .then((res) => this._handleResponse(res));
   }
 
-  getCardsFromApi () {
+  getCardsFromApi (token) {
     return fetch(`${this._url}/cards`, {
-      headers: this._headers,
+      headers: {        
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
     })
     .then((res) => this._handleResponse(res));
   }
 
-  editProfileFromApi (userInfo) {
+  editProfileFromApi (userInfo, token) {
     return fetch(`${this._url}/users/me`, {
       method: "PATCH",
-      headers: this._headers,
+      headers: {        
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
       body: JSON.stringify(userInfo),
     })
     .then((res) => this._handleResponse(res))
   }
 
-  postNewCardToServer(card) {
+  postNewCardToServer(card, token) {
     return fetch(`${this._url}/cards`, {
       method: 'POST',
-      headers: this._headers,
+      headers: {        
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
       body: JSON.stringify(card)
     })
     .then ((res) => this._handleResponse(res));
   }
 
-  deleteCardFromServer (cardId) {
+  deleteCardFromServer (cardId, token) {
     return fetch(`${this._url}/cards/${cardId}`,{
       method: 'DELETE',
-      headers: this._headers
+      headers: {        
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
     })
     .then((res) => this._handleResponse(res));
   }  
 
-  changeLikeCardStatus(cardId, isLiked) {
+  changeLikeCardStatus(cardId, isLiked, token) {
     return fetch(`${this._url}/cards/${cardId}/likes`,{
       method: `${isLiked ? 'DELETE' : 'PUT'}`,
-      headers: this._headers
+      headers: {        
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
     })
     .then((res) => this._handleResponse(res));
   }
 
-  patchAvatarFromApi (newAvatarLink) {
+  patchAvatarFromApi (newAvatarLink, token) {
     return fetch(`${this._url}/users/me/avatar`, {
       method: 'PATCH',
-      headers: this._headers,
+      headers: {        
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
       body: JSON.stringify({ avatar: newAvatarLink }),
     })
     .then ((res) => this._handleResponse(res));
   }
 }
 
-export const api = new Api ({
-  url: 'http://api.front.proekt.nomoredomains.work',
-  headers: {        
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${localStorage.getItem("jwt")}`
-  },
+export const api = new Api ({ 
+  url: 'http://api.front.proekt.nomoredomains.work'  
 });

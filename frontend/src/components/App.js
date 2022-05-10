@@ -47,12 +47,14 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setSelectedCard(null);
     setIsInfoTooltipOpen(false);
-  };   
+  };
+  
+  const token = localStorage.getItem("jwt");
 
   useEffect(() => {      
     if (isLoggedIn) {      
       api
-        .getUserInfoFromApi()
+        .getUserInfoFromApi(token)
         .then((user) => {                   
           setCurrentUser(user);
           setEmail(user.email);          
@@ -64,7 +66,7 @@ function App() {
   useEffect(() => {    
     if (isLoggedIn) {
       api
-        .getCardsFromApi()
+        .getCardsFromApi(token)
         .then((cards) => {          
           setCards(cards.reverse());
         })
@@ -127,8 +129,7 @@ function App() {
       });
   };
 
-  const checkToken = () => {
-    const token = localStorage.getItem("jwt");
+  const checkToken = () => {    
     if (token) {      
       auth.getToken(token)
         .then((res) => {                            
@@ -157,7 +158,7 @@ function App() {
 
   const handleUpdateUser = (user) => {
     api
-      .editProfileFromApi(user)
+      .editProfileFromApi(user, token)
       .then((userInfo) => {        
         setCurrentUser(userInfo);
         closeAllPopups();
@@ -167,7 +168,7 @@ function App() {
 
   const handleUpdateAvatar = ({ avatar }) => {
     api
-      .patchAvatarFromApi(avatar)
+      .patchAvatarFromApi(avatar, token)
       .then((user) => {
         setCurrentUser(user);
         closeAllPopups();
@@ -179,7 +180,7 @@ function App() {
     const isLiked = card.likes.some((item) => item === currentUser._id);
     
     api
-      .changeLikeCardStatus(card._id, isLiked)
+      .changeLikeCardStatus(card._id, isLiked, token)
       .then((newCard) => {
         setCards((state) =>
           state.map((item) => (item._id === card._id ? newCard : item))
@@ -190,7 +191,7 @@ function App() {
 
   const handleCardDelete = (card) => {
     api
-      .deleteCardFromServer(card._id)
+      .deleteCardFromServer(card._id, token)
       .then(() => {
         setCards((state) => state.filter((item) => item._id !== card._id));
       })
@@ -199,7 +200,7 @@ function App() {
 
   const handleAddNewCard = (card) => {
     api
-      .postNewCardToServer(card)
+      .postNewCardToServer(card, token)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
