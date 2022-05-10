@@ -92,5 +92,5 @@ class Api {
 }
 
 export const api = new Api ({ 
-  url: 'http://api.front.proekt.nomoredomains.work'  
+  url: 'https://api.front.proekt.nomoredomains.work'  
 });
