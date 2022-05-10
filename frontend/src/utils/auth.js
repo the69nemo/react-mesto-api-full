@@ -1,4 +1,4 @@
-export const BASE_URL = "http://api.front.proekt.nomoredomains.work";
+export const BASE_URL = "https://api.front.proekt.nomoredomains.work";
 
 const handleResponse = (res) => {
   if (res.ok) {
